@@ -12,9 +12,21 @@ jobs:
   validate-infra:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: v1.0
+
+      - name: Format Terraform
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
       - name: Validate Terraform
-        run: ls -la
-       # run: heroic-api/infra/scripts/terraform_validate.sh
+        run: heroic-api/infra/scripts/terraform_validate.sh
 
   # lint-source:
   #   runs-on: ubuntu-latest
