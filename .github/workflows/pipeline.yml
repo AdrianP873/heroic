@@ -7,6 +7,7 @@ on:
 env:
   REGION: ap-southeast-2
   APPLICATION_NAME: heroic-api
+  ENV: dev
 
 jobs:
   validate-infra:
