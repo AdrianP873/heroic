@@ -1,0 +1,53 @@
+name: heroic-api
+on:
+  push:
+    paths:
+      - 'heroic-api/**'
+      - '!heroic-api/infra/scripts/**'
+env:
+  REGION: ap-southeast-2
+  APPLICATION_NAME: heroic-api
+jobs:
+  validate-infra:
+    runs-on: ubuntu-latest
+    working-directory: heroic-api
+    steps:
+      - name: Validate Terraform
+        run: infra/scripts/terraform_validate.h
+
+  # lint-source:
+  #   runs-on: ubuntu-latest
+  #   working-directory: heroic-api
+  #   steps:
+
+  # test-source:
+  #   runs-on: ubuntu-latest
+  #   working-directory: heroic-api
+  #   steps:
+
+  # checkov-scan:
+  #   runs-on: ubuntu-latest
+  #   working-directory: heroic-api
+  #   steps:
+
+  # plan-infra:
+  #   needs: validate-infra
+  #   runs-on: ubuntu-latest 
+  #   working-directory: heroic-api
+  #   steps:
+
+  # apply-infra:
+  #   needs: plan-infra
+  #   runs-on: ubuntu-latest
+  #   working-directory: heroic-api
+  #   steps:
+
+  # build-and-upload-docker-image:
+  #   needs: apply-infra
+
+
+
+
+
+  
+  
