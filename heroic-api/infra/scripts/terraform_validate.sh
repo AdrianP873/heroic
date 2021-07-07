@@ -1,2 +1,3 @@
 #!/bin/sh
-echo "validating terraform"
+terraform init -backend=false
+terraform validate

@@ -12,6 +12,17 @@ jobs:
   validate-infra:
     runs-on: ubuntu-latest
     steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} # if you have/need it
+          aws-region: ${{ env.REGION }}
+
+      - name: Test AWS CLI
+        run: aws s3 ls
+  
       - name: Checkout Code
         uses: actions/checkout@v2
 
