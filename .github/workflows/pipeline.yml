@@ -19,9 +19,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} # if you have/need it
           aws-region: ${{ env.REGION }}
-
-      - name: Test AWS CLI
-        run: aws s3 ls
   
       - name: Checkout Code
         uses: actions/checkout@v2
