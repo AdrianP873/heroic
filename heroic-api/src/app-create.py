@@ -12,7 +12,13 @@ logger.setLevel(logging.INFO)
 
 
 def handler(event, context):
-    
+    """ Build baseline pipeline """
+    # Store baseline pipeline config file in s3
+    # Lambda pulls down s3 file, reads it, and substitutes own values into file
+    # Lambda uses file
+
+# Whatever we pass can be accessed via event["key"]
+
     #logging.info("meal: {}, ingredients: {}".format(payload["meal"], payload["ingredients"]))
    
     return_status = 200
