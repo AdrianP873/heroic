@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate Terraform
-        run: infra/scripts/terraform_validate.sh
+        run: heroic-api/infra/scripts/terraform_validate.sh
 
   # lint-source:
   #   runs-on: ubuntu-latest
