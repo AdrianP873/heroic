@@ -43,12 +43,25 @@ jobs:
   #   working-directory: heroic-api
   #   steps:
 
-  # plan-infra:
-  #   needs: validate-infra
-  #   runs-on: ubuntu-latest 
-  #   working-directory: heroic-api
-  #   steps:
+  plan-infra:
+    needs: validate-infra
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: v1.0
+
+      - name: Format Terraform
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Validate Terraform
+        run: heroic-api/infra/scripts/terraform_plan.sh
   # apply-infra:
   #   needs: plan-infra
   #   runs-on: ubuntu-latest
