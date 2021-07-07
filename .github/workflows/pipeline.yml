@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - '*'
-      - '!heroic-api/infra/scripts/**'
+
 env:
   REGION: ap-southeast-2
   APPLICATION_NAME: heroic-api
