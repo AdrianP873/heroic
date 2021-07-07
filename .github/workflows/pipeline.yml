@@ -7,13 +7,13 @@ on:
 env:
   REGION: ap-southeast-2
   APPLICATION_NAME: heroic-api
+
 jobs:
   validate-infra:
     runs-on: ubuntu-latest
-    working-directory: heroic-api
     steps:
       - name: Validate Terraform
-        run: infra/scripts/terraform_validate.h
+        run: infra/scripts/terraform_validate.sh
 
   # lint-source:
   #   runs-on: ubuntu-latest
