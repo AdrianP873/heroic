@@ -2,7 +2,7 @@ name: heroic-api
 on:
   push:
     paths:
-      - '*'
+      - '!*'
 
 env:
   REGION: ap-southeast-2
