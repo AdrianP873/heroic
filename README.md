@@ -6,6 +6,8 @@
 ## To do
 - Provision a bucket with Terraform to hold pipeline config files. Grant access to lambda function role.
 - In app-create.py, think of a way to dynamically add the environment (and maybe owner) to ECR repository tags to keep consistency.
+- Create lambda layer for requests library
+- Add GIT_TOKEN as secret
 
 
 ## IAM Requirements
@@ -13,3 +15,6 @@
     - s3:GetObject
     - ecr:DescribeRepositories
     - ecr:CreateRepository
+
+## Design Decisions
+- TBC

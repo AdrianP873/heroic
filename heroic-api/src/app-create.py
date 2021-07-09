@@ -5,7 +5,7 @@ Create an application.
 import boto3
 from botocore.exceptions import ClientError
 import logging
-import re, json
+import re, json, requests
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -26,19 +26,17 @@ def lambda_handler(event, context):
     logger.info("app_name: {}, github_url: {}, repo_name: {}".format(app_name, github_url, repo_name))
 
     # Call build pipeline funciton
-    build_base_pipeline(app_name)
+    build_base_pipeline(app_name, repo_name)
 
     # Call build ECR function
     build_ecr_repo(app_name, repo_name)
-
-    # todo: Upload the file to the Github Repo
 
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
     }
 
-def build_base_pipeline(app):
+def build_base_pipeline(app, repo):
     """ Creates a baseline pipeline config and uploads it to Git repo """
 
     # Pull down config file from s3
@@ -63,6 +61,13 @@ def build_base_pipeline(app):
         text = re.sub("NAME_PLACEHOLDER", app, text)
         a.seek(0)
         print(text)
+
+    # Upload the file to the Github Repo
+    git_url = "https://api.github.com/repos/{owner}/{repo}/contents/test.txt".format(owner="adrianp873", repo=repo)
+    headers = {"Accept": "application/vnd.github.v3+json", "Authorization": "token " + os.environ["GIT_TOKEN"]}
+    data = {"message":"message","content":"aGVsbG93b3JsZAo="}
+
+    res = requests.put(git_url, headers=headers, data=json.dumps(data))
 
 def build_ecr_repo(app, repo):
     """ Creates new ECR repo if one doesn't already exist """
