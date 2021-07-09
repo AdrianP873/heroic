@@ -15,14 +15,31 @@ def lambda_handler(event, context):
     # Parse the app_name and github_url passed to it
     app_name = event["app_name"]
     github_url = event["github_url"]
-    logger.info("app_name: {}, github_url: {}".format(app_name, github_url))
-
     search_repo = re.search("/(.+?).git", github_url)
+
     if search_repo:
         repo_name = search_repo.group(1)
         logger.info("Repository name {} found.".format(repo_name))
     else:
         logger.warning("Couldn't find repository name from git URL.")
+
+    logger.info("app_name: {}, github_url: {}, repo_name: {}".format(app_name, github_url, repo_name))
+
+    # Call build pipeline funciton
+    build_base_pipeline(app_name)
+
+    # Call build ECR function
+    build_ecr_repo(app_name, repo_name)
+
+    # todo: Upload the file to the Github Repo
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+
+def build_base_pipeline(app):
+    """ Creates a baseline pipeline config and uploads it to Git repo """
 
     # Pull down config file from s3
     logger.info("Pulling down config file python_pipeline.yml")
@@ -34,8 +51,7 @@ def lambda_handler(event, context):
         Key="python_pipeline.yml"
     )
 
-    # Modify file to put in the app_name and github_uri
-    logger.info("Modifying config pipeline file with application name: {}".format(app_name))
+    logger.info("Modifying config pipeline file with application name: {}".format(app))
 
     contents = data['Body'].read()
     
@@ -44,23 +60,9 @@ def lambda_handler(event, context):
 
     with open("/tmp/test.txt", "r+") as a:
         text = a.read()
-        text = re.sub("NAME_PLACEHOLDER", app_name, text)
+        text = re.sub("NAME_PLACEHOLDER", app, text)
         a.seek(0)
         print(text)
-
-    # todo: Upload the file to the Github Repo
-
-    # Call build ECR function
-    build_ecr_repo(app_name, repo_name)
-
-    return {
-        'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
-    }
-
-def build_base_pipeline(app, repo):
-    pass
-
 
 def build_ecr_repo(app, repo):
     """ Creates new ECR repo if one doesn't already exist """
