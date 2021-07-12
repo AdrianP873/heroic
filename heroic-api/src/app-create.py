@@ -5,7 +5,7 @@ Create an application.
 import boto3
 from botocore.exceptions import ClientError
 import logging
-import re, json, requests
+import re, json, requests, os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -33,7 +33,7 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
+        'body': json.dumps({'test': app_name})
     }
 
 def build_base_pipeline(app, repo):
