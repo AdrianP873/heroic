@@ -11,14 +11,15 @@ Parameters:
     Description: Environment
     Default: dev
 
-Resources:
+Resources:  
+
   HeroicApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       Name: Heroic-Api
-      StageName: ${ENV}
+      StageName: dev
       DefinitionBody:
-        swagger: "3.0"
+        swagger: "2.0"
         info:
           title: Heroic API
           version: "1"
@@ -35,27 +36,20 @@ Resources:
                 type: "aws_proxy"
                 httpMethod: "POST"
                 uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${HeroicAppCreateFunction}/invocations"
-                connectionType: "INTERNET"
-                
+
   HeroicAppCreateFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: heroic-create.handler
+      Handler: app-create.lambda_handler
       Runtime: python3.8
       FunctionName: !Sub heroic-app-create-${ENV}
       Description: Creates a baseline pipeline, ECR repo and values.yml manifest.
-      CodeUri: heroic-api/src/app-create.py
+      CodeUri: src/
       Events:
         HeroicApiEvent:
           Type: Api
           Properties:
             Path: /v1/app
             Method: post
-            RestApiId:
-              Ref: HeroicApiGateway
+            RestApiId: !Ref HeroicApiGateway
 
-
-    
-    
-  
-  

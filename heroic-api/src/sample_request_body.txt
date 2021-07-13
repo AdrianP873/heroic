@@ -1,0 +1,4 @@
+{
+  "app_name": "heroic-app",
+  "github_url": "git@github.com:AdrianP873/heroic.git"
+}
