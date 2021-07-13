@@ -68,8 +68,15 @@ def build_base_pipeline(app, repo):
         print(text)
 
     # Upload the file to the Github Repo
+    ssm = boto3.client("ssm")
+
+    get_secret = ssm.get_parameter(
+        Name="GIT_TOKEN",
+        WithDecryption=True
+    )
+
     git_url = "https://api.github.com/repos/{owner}/{repo}/contents/test.txt".format(owner="adrianp873", repo=repo)
-    headers = {"Accept": "application/vnd.github.v3+json", "Authorization": "token " + os.environ["GIT_TOKEN"]}
+    headers = {"Accept": "application/vnd.github.v3+json", "Authorization": "token " + get_secret["Parameter"]["Value"]}
     data = {"message":"message","content":"aGVsbG93b3JsZAo="}
 
     res = requests.put(git_url, headers=headers, data=json.dumps(data))
