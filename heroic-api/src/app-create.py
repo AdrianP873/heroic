@@ -28,7 +28,7 @@ def lambda_handler(event, context):
     logger.info("app_name: {}, github_url: {}, repo_name: {}".format(app_name, github_url, repo_name))
 
     # Call build pipeline funciton
-    build_base_pipeline(app_name, repo_name, github_url)
+    build_base_pipeline(app_name, repo_name)
 
     # Call build ECR function
     build_ecr_repo(app_name, repo_name)
@@ -41,7 +41,7 @@ def lambda_handler(event, context):
         'body': json.dumps(return_body)
     }
 
-def build_base_pipeline(app, repo, github_url):
+def build_base_pipeline(app, repo):
     """ Creates a baseline pipeline config and uploads it to Git repo """
 
     # Pull down config file from s3
@@ -54,6 +54,7 @@ def build_base_pipeline(app, repo, github_url):
         Key="python_pipeline.yml"
     )
 
+    logger.info("Decoding config file contents.")
     format_data = data['Body'].read()
     decoded_file_contents = format_data.decode('ascii')
 
@@ -67,7 +68,7 @@ def build_base_pipeline(app, repo, github_url):
         text = re.sub("NAME_PLACEHOLDER", app, text)
         a.seek(0)
 
-    # Upload the file to the Github Repo
+    # Retrie git secret and upload file to the Github Repo
     ssm = boto3.client("ssm")
 
     get_secret = ssm.get_parameter(
@@ -96,7 +97,7 @@ def build_base_pipeline(app, repo, github_url):
         # This may occur if the .github/workflows directory already exists.)
         print('404 Client Error: the .github/workflows directory likely already exists. See limitations in README.')
     else:
-        print("Pipeline configuration created at {github_url}/.github/workflows/python_pipeline.yml".format(github_url=github_url))
+        print("Pipeline configuration created at {repo}/.github/workflows/python_pipeline.yml".format(repo=repo))
 
 def build_ecr_repo(app, repo):
     """ Creates new ECR repo if one doesn't already exist """
