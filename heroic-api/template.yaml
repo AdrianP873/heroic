@@ -64,4 +64,4 @@ Resources:
           Action:
           - ecr:DescribeRepositories
           - ecr:CreateRepository
-          Resource: arn:aws:ecr:*:591905306170:repository/*
+          Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/*
