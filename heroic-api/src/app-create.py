@@ -5,7 +5,7 @@ Create an application.
 import boto3
 from botocore.exceptions import ClientError
 import logging
-import re, json, requests, os
+import re, json, requests, base64
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -28,7 +28,7 @@ def lambda_handler(event, context):
     logger.info("app_name: {}, github_url: {}, repo_name: {}".format(app_name, github_url, repo_name))
 
     # Call build pipeline funciton
-    build_base_pipeline(app_name, repo_name)
+    build_base_pipeline(app_name, repo_name, github_url)
 
     # Call build ECR function
     build_ecr_repo(app_name, repo_name)
@@ -41,7 +41,7 @@ def lambda_handler(event, context):
         'body': json.dumps(return_body)
     }
 
-def build_base_pipeline(app, repo):
+def build_base_pipeline(app, repo, github_url):
     """ Creates a baseline pipeline config and uploads it to Git repo """
 
     # Pull down config file from s3
@@ -75,11 +75,28 @@ def build_base_pipeline(app, repo):
         WithDecryption=True
     )
 
-    git_url = "https://api.github.com/repos/{owner}/{repo}/contents/test.txt".format(owner="adrianp873", repo=repo)
+    git_url = "https://api.github.com/repos/{owner}/{repo}/contents/.github/workflows/python_pipeline.yml".format(owner="adrianp873", repo=repo)
     headers = {"Accept": "application/vnd.github.v3+json", "Authorization": "token " + get_secret["Parameter"]["Value"]}
-    data = {"message":"message","content":"aGVsbG93b3JsZAo="}
+
+    # Read pipeline config file
+    pipeline_file = open("python_pipeline.yml", "r")
+    read_file = str(pipeline_file.read())
+    pipeline_file.close()
+
+    # Base64 encode pipeline file
+    file_bytes = read_file.encode('ascii')
+    base64_bytes = base64.b64encode(file_bytes)
+    base64_file = base64_bytes.decode('ascii')
+
+    data = {"message":"message","content": base64_file}
 
     res = requests.put(git_url, headers=headers, data=json.dumps(data))
+
+    if res.status_code == 404:
+        # This may occur if the .github/workflows directory already exists.)
+        print('404 Client Error: the .github/workflows directory likely already exists. See limitations in README.')
+    else:
+        print("Pipeline configuration created at {github_url}/.github/workflows/python_pipeline.yml".format(github_url=github_url))
 
 def build_ecr_repo(app, repo):
     """ Creates new ECR repo if one doesn't already exist """
