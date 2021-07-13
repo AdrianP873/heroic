@@ -2,12 +2,13 @@ name: heroic-api
 on:
   push:
     paths:
-      - '!*'
+      - '/heroic-api'
 
 env:
+  ENV: dev
   REGION: ap-southeast-2
   APPLICATION_NAME: heroic-api
-  ENV: dev
+  S3_BUCKET: heroic-api-sam
 
 jobs:
   validate-infra:
@@ -18,7 +19,6 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} # if you have/need it
           aws-region: ${{ env.REGION }}
   
       - name: Checkout Code
@@ -36,21 +36,6 @@ jobs:
 
       - name: Validate Terraform
         run: heroic-api/infra/scripts/terraform_validate.sh
-
-  # lint-source:
-  #   runs-on: ubuntu-latest
-  #   working-directory: heroic-api
-  #   steps:
-
-  # test-source:
-  #   runs-on: ubuntu-latest
-  #   working-directory: heroic-api
-  #   steps:
-
-  # checkov-scan:
-  #   runs-on: ubuntu-latest
-  #   working-directory: heroic-api
-  #   steps:
 
   plan-infra:
     needs: validate-infra
@@ -92,13 +77,33 @@ jobs:
       - name: Apply Terraform
         run: heroic-api/infra/scripts/terraform_apply.sh
 
+  sam-build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/setup-sam@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.REGION }}
+      - run: sam build --use-container
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${env.APPLICATION_NAME} --s3-bucket ${env.S3_BUCKET} --capabilities CAPABILITY_IAM --region ${env.REGION}
+  
+  # lint-source:
+  #   runs-on: ubuntu-latest
+  #   working-directory: heroic-api
+  #   steps:
+
+  # test-source:
+  #   runs-on: ubuntu-latest
+  #   working-directory: heroic-api
+  #   steps:
+
+  # checkov-scan:
+  #   runs-on: ubuntu-latest
+  #   working-directory: heroic-api
+  #   steps:
 
   # build-and-upload-docker-image:
   #   needs: apply-infra
-
-
-
-
-
-  
-  

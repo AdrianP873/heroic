@@ -10,12 +10,7 @@
 - Add GIT_TOKEN as secret
 - Fix IAM permissions in template.yaml (least privilege)
 
-
-## IAM Requirements
-- Lambda execution role:
-    - s3:GetObject
-    - ecr:DescribeRepositories
-    - ecr:CreateRepository
-
 ## Design Decisions
 - TBC
+
+https://docs.github.com/en/actions/guides/building-and-testing-python#testing-your-code
