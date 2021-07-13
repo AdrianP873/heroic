@@ -54,12 +54,13 @@ def build_base_pipeline(app, repo, github_url):
         Key="python_pipeline.yml"
     )
 
+    format_data = data['Body'].read()
+    decoded_file_contents = format_data.decode('ascii')
+
     logger.info("Modifying config pipeline file with application name: {}".format(app))
 
-    contents = data['Body'].read()
-    
     with open("/tmp/test.txt", "w+") as f:
-        f.write(str(contents))
+        f.write(str(decoded_file_contents))
 
     with open("/tmp/test.txt", "r+") as a:
         text = a.read()
