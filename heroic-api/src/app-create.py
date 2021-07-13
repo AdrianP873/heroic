@@ -13,8 +13,10 @@ logger.setLevel(logging.INFO)
 def lambda_handler(event, context):
     """ Build baseline pipeline """
     # Parse the app_name and github_url passed to it
-    app_name = event["app_name"]
-    github_url = event["github_url"]
+    data = json.loads(event['body'])
+
+    app_name = data["app_name"]
+    github_url = data["github_url"]
     search_repo = re.search("/(.+?).git", github_url)
 
     if search_repo:
@@ -31,9 +33,12 @@ def lambda_handler(event, context):
     # Call build ECR function
     build_ecr_repo(app_name, repo_name)
 
+    return_body = {"message": "{} successfully created".format(app_name)}
+    return_status = 200
+
     return {
-        'statusCode': 200,
-        'body': json.dumps({'test': app_name})
+        'statusCode': return_status,
+        'body': json.dumps(return_body)
     }
 
 def build_base_pipeline(app, repo):
