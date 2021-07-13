@@ -11,7 +11,9 @@
 - Fix IAM permissions in template.yaml (least privilege)
 - Create an automated way to manage secrets (that aren't revealed in the TF state file)
 
-## Design Decisions
-- TBC
 
+## Design Decisions
+- Monorepo vs Polyrepo
+- AWS SAM vs Terraform for Serverless
+- Heroic-charts location i.e. separate hosted repo vs deploy directly from heroic repo
 https://docs.github.com/en/actions/guides/building-and-testing-python#testing-your-code
