@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'heroic-api/**'
+      - '!heroic-api/charts/**'
 
 env:
   ENV: dev
