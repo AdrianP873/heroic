@@ -11,72 +11,6 @@ env:
   S3_BUCKET: heroic-api-sam
 
 jobs:
-  validate-infra:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.REGION }}
-  
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: v1.0
-
-      - name: Format Terraform
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
-
-      - name: Validate Terraform
-        run: heroic-api/infra/scripts/terraform_validate.sh
-
-  plan-infra:
-    needs: validate-infra
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: v1.0
-
-      - name: Format Terraform
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
-
-      - name: Plan Terraform
-        run: heroic-api/infra/scripts/terraform_plan.sh
-
-  apply-infra:
-    needs: plan-infra
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: v1.0
-
-      - name: Format Terraform
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
-
-      - name: Apply Terraform
-        run: heroic-api/infra/scripts/terraform_apply.sh
-
   sam-build-deploy:
     runs-on: ubuntu-latest
     steps:
@@ -89,7 +23,73 @@ jobs:
           aws-region: ${{ env.REGION }}
       - run: sam build --use-container --template heroic-api/template.yaml
       - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${env.APPLICATION_NAME} --s3-bucket ${env.S3_BUCKET} --capabilities CAPABILITY_IAM --region ${env.REGION}
+
+  # validate-infra:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ env.REGION }}
   
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v1
+  #       with:
+  #         terraform_version: v1.0
+
+  #     - name: Format Terraform
+  #       id: fmt
+  #       run: terraform fmt -check
+  #       continue-on-error: true
+
+  #     - name: Validate Terraform
+  #       run: heroic-api/infra/scripts/terraform_validate.sh
+
+  # plan-infra:
+  #   needs: validate-infra
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v1
+  #       with:
+  #         terraform_version: v1.0
+
+  #     - name: Format Terraform
+  #       id: fmt
+  #       run: terraform fmt -check
+  #       continue-on-error: true
+
+  #     - name: Plan Terraform
+  #       run: heroic-api/infra/scripts/terraform_plan.sh
+
+  # apply-infra:
+  #   needs: plan-infra
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v1
+  #       with:
+  #         terraform_version: v1.0
+
+  #     - name: Format Terraform
+  #       id: fmt
+  #       run: terraform fmt -check
+  #       continue-on-error: true
+
+  #     - name: Apply Terraform
+  #       run: heroic-api/infra/scripts/terraform_apply.sh
+
   # lint-source:
   #   runs-on: ubuntu-latest
   #   working-directory: heroic-api
