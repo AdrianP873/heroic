@@ -2,7 +2,7 @@ name: heroic-api
 on:
   push:
     paths:
-      - '/heroic-api/*'
+      - 'heroic-api/*'
 
 env:
   ENV: dev
