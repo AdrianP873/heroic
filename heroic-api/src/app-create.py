@@ -59,14 +59,13 @@ def build_base_pipeline(app, repo, github_url):
 
     logger.info("Modifying config pipeline file with application name: {}".format(app))
 
-    with open("/tmp/test.txt", "w+") as f:
+    with open("/tmp/python_pipeline.yml", "w+") as f:
         f.write(str(decoded_file_contents))
 
-    with open("/tmp/test.txt", "r+") as a:
+    with open("/tmp/python_pipeline.yml", "r+") as a:
         text = a.read()
         text = re.sub("NAME_PLACEHOLDER", app, text)
         a.seek(0)
-        print(text)
 
     # Upload the file to the Github Repo
     ssm = boto3.client("ssm")
