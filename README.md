@@ -12,6 +12,7 @@
 - Create an automated way to manage secrets (that aren't revealed in the TF state file)
 - Run SAM validate on template file in CI
 - Add test after changes to src code i.e. invoke API-GW
+- If modify heroic-api/templates/python_pipe.yml, have CI lint/validate the yaml and upload it to s3 bucket
 
 ## Design Decisions
 - Monorepo vs Polyrepo
