@@ -10,6 +10,10 @@ data "aws_iam_role" "lambda-execution-role" {
   name = "heroic-lambda-execution-role-${var.env}"
 }
 
+provider "aws" {
+  region = var.region
+}
+
 resource "aws_s3_bucket" "heroic_bucket" {
   bucket = "heroic-ap-southeast-2-pipeline-configs"
   acl    = "private"
