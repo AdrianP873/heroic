@@ -67,6 +67,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Description: "Lambda execution role for the serverless heroic application."
+      RoleName: heroic-lambda-execution-role-${ENV}
       Path: /
       Policies:
         - PolicyName: heroic-lambda-execution-policy
