@@ -52,19 +52,6 @@ Resources:
             Path: /v1/app
             Method: post
             RestApiId: !Ref HeroicApiGateway
-      Policies:
-      - Statement:
-        - Sid: S3GetObjectPolicy
-          Effect: Allow
-          Action:
-          - s3:GetObject
-          Resource: '*'
-        - Sid: EcrRepositoryPolicy
-          Effect: Allow
-          Action:
-          - ecr:DescribeRepositories
-          - ecr:CreateRepository
-          Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/*
 
   HeroicAppLambdaExecutionRole:
     Type: AWS::IAM::Role

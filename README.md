@@ -10,7 +10,7 @@
 - Create lambda layer for requests library - Now being packed with SAM
 - Fix IAM permissions in template.yaml (least privilege)
 - Create an automated way to manage secrets (that aren't revealed in the TF state file)
-
+- Run SAM validate on template file in CI
 
 ## Design Decisions
 - Monorepo vs Polyrepo
