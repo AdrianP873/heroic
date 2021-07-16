@@ -65,7 +65,7 @@ Resources:
               Service:
                 - lambda.amazonaws.com
             Action:
-              - 'sts:AssumeRole'
+              - "sts:AssumeRole"
       Description: "Lambda execution role for the serverless heroic application."
       RoleName: !Sub heroic-lambda-execution-role-${ENV}
       Path: /
@@ -78,7 +78,7 @@ Resources:
                 Action:
                   - logs:*
                 Resource:
-                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*'
+                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*
               - Effect: Allow
                 Action:
                   - "s3:GetObject"
@@ -88,3 +88,7 @@ Resources:
                   - ecr:DescribeRepositories
                   - ecr:CreateRepository
                 Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/*
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/GIT_TOKEN
