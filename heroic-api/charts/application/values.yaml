@@ -1,0 +1,26 @@
+imageRegistry: ""
+dockerTag: "latest"
+pullPolicy: "Always"
+containerArgs: [ "npm", "run"]
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
+service:
+  enabled: false
+  port: 5000
+  uri: /default
+
+serviceAccount:
+  create: false
+  name: null
+  iamRoleArn: null
+
+env:
+  ENV_VAR1: var1
+  ENV_VAR2: var2
