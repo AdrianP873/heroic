@@ -4,6 +4,11 @@ on:
     paths:
       - 'heroic-api/src/**'
       - '!heroic-api/charts/**'
+  workflow_dispatch:
+    home:
+      required: false
+      default: "Testing manual trigger"
+      description: "location"
 
 env:
   ENV: dev
