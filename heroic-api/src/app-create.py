@@ -5,7 +5,7 @@ Create an application.
 import boto3
 from botocore.exceptions import ClientError
 import logging
-import re, json, requests, base64
+import re, json, requests, base64, os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -60,10 +60,11 @@ def build_base_pipeline(app, repo):
 
     logger.info("Modifying config pipeline file with application name: {}".format(app))
 
-    with open("/tmp/python_pipeline.yml", "w+") as f:
+    os.chdir("/tmp")
+    with open("./python_pipeline.yml", "w+") as f:
         f.write(str(decoded_file_contents))
 
-    with open("/tmp/python_pipeline.yml", "r+") as a:
+    with open("./python_pipeline.yml", "r+") as a:
         text = a.read()
         text = re.sub("NAME_PLACEHOLDER", app, text)
         a.seek(0)

@@ -11,6 +11,7 @@
 - Fix IAM permissions in template.yaml (least privilege)
 - Create an automated way to manage secrets (that aren't revealed in the TF state file)
 - Run SAM validate on template file in CI
+- Add test after changes to src code i.e. invoke API-GW
 
 ## Design Decisions
 - Monorepo vs Polyrepo
