@@ -3,7 +3,7 @@ set -x
 
 STATE_BUCKET="heroic-${REGION}-tf"
 
-cd infra
+cd heroic-api/infra
 
 terraform init \
   -backend-config="bucket=${STATE_BUCKET}"
