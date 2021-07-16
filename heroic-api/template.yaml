@@ -45,6 +45,7 @@ Resources:
       FunctionName: !Sub heroic-app-create-${ENV}
       Description: Creates a baseline pipeline, ECR repo and values.yml manifest.
       CodeUri: src/
+      Role: !GetAtt HeroicAppLambdaExecutionRole.Arn
       Events:
         HeroicApiEvent:
           Type: Api
