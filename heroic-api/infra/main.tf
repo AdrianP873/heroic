@@ -2,7 +2,7 @@ locals {
     common_tags = {
         env   = var.env
         owner = "AdrianP873"
-        repo  = "heroic" 
+        repo  = "heroic"
     }
 }
 
