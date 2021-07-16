@@ -65,3 +65,37 @@ Resources:
           - ecr:DescribeRepositories
           - ecr:CreateRepository
           Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/*
+
+  HeroicAppLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Description: "Lambda execution role for the serverless heroic application."
+      Path: /
+      Policies:
+        - PolicyName: heroic-lambda-execution-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:*
+                Resource:
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*'
+              - Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ecr:DescribeRepositories
+                  - ecr:CreateRepository
+                Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/*

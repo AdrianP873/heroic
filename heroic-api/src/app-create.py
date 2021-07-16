@@ -68,7 +68,7 @@ def build_base_pipeline(app, repo):
         text = re.sub("NAME_PLACEHOLDER", app, text)
         a.seek(0)
 
-    # Retrie git secret and upload file to the Github Repo
+    # Retrieve git secret and upload file to the Github Repo
     ssm = boto3.client("ssm")
 
     get_secret = ssm.get_parameter(
