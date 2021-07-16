@@ -43,7 +43,7 @@ jobs:
         continue-on-error: true
 
       - name: Validate Terraform
-      - run: heroic-api/infra/scripts/terraform_validate.sh
+        run: heroic-api/infra/scripts/terraform_validate.sh
 
   plan-infra:
     needs: validate-infra
