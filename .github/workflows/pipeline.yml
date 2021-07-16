@@ -42,8 +42,9 @@ jobs:
         run: terraform fmt -check
         continue-on-error: true
 
-      - name: Validate Terraform
-        run: heroic-api/scripts/terraform_validate.sh
+      #- name: Validate Terraform
+      - run: ls -l heroic-api/scripts
+      - run: heroic-api/scripts/terraform_validate.sh
 
   plan-infra:
     needs: validate-infra
