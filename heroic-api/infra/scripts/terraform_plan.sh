@@ -12,6 +12,8 @@ terraform init \
 terraform workspace list
 terraform workspace select ${ENV} || terraform workspace new ${ENV}
 
-terraform plan
+terraform plan \
+  -var "env=${ENV}" \
+  -var "region=${REGION}"
 
 terraform show

@@ -11,4 +11,7 @@ terraform init \
 
 terraform workspace select ${ENV} || terraform workspace new ${ENV}
 
-terraform apply -auto-approve
+terraform apply \
+  -auto-approve \
+  -var "env=${ENV}" \
+  -var "region=${REGION}"
