@@ -28,7 +28,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.REGION }}
       - run: sam build --use-container --template heroic-api/template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{ env.APPLICATION_NAME }} --s3-bucket ${{ env.S3_BUCKET }} --capabilities CAPABILITY_IAM --region ${{ env.REGION }}
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{ env.APPLICATION_NAME }} --s3-bucket ${{ env.S3_BUCKET }} --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM --region ${{ env.REGION }}
 
   # validate-infra:
   #   runs-on: ubuntu-latest
