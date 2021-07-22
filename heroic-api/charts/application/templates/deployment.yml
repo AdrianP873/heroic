@@ -13,9 +13,9 @@ spec:
   template:
     metadata:
       {{- template "application.labels" | indent 6 }}
-  {{- if .Values.serviceAccount }}
-  serviceAccountName: {{ .Values.serviceAccount.name }}
-  {{- end }}
+  # {{- if .Values.serviceAccount }}
+  # serviceAccountName: {{ .Values.serviceAccount.name }}
+  # {{- end }}
     spec:
       containers:
       - name: app

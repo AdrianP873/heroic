@@ -13,6 +13,8 @@
 - Run SAM validate on template file in CI
 - Add test after changes to src code i.e. invoke API-GW
 - If modify heroic-api/templates/python_pipe.yml, have CI lint/validate the yaml and upload it to s3 bucket
+- Template, package, test and deploy application chart
+
 
 ## Design Decisions
 - Monorepo vs Polyrepo
