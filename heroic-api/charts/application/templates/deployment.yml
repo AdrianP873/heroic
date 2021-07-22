@@ -2,20 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Release.Namespace }}
-  {{- template "application.labels" | indent 2 }}
+  name: test
+  namespace: default
+  {{- include "application.labels" . | indent 2 }}
 spec:
-  replicas: {{ .Values.replicaCount}}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}
   template:
     metadata:
-      {{- template "application.labels" | indent 6 }}
-  # {{- if .Values.serviceAccount }}
-  # serviceAccountName: {{ .Values.serviceAccount.name }}
-  # {{- end }}
+      {{- include "application.labels" . | indent 6 }}
     spec:
       containers:
       - name: app

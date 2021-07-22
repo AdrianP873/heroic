@@ -4,13 +4,13 @@ kind: Pod
 metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
-  {{- template "application.labels" | indent 2 }}
+  {{- include "application.labels" . | indent 2 }}
   annotations:
     "helm.sh/hook": test
 spec:
   containers:
   - name: {{ .Release.Name }}-application-test}}
-    image: "{{ .Values.imageRegistry }}:{{ .Values.dockerTag }}" # Maybe test a static image that I know will work
+    image: "{{ .Values.imageRegistry }}:{{ .Values.dockerTag }}"
     imagePullPolicy: {{ .Values.pullPolicy }}
     ports:
     - containerPort: 80

@@ -16,11 +16,5 @@ service:
   port: 5000
   uri: /default
 
-serviceAccount:
-  create: false
-  name: null
-  iamRoleArn: null
-
 env:
-  ENV_VAR1: var1
-  ENV_VAR2: var2
+  HELLO: World
