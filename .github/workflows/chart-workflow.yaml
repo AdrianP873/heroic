@@ -1,0 +1,54 @@
+name: heroic-api
+on:
+  push:
+    paths:
+      - 'heroic-api/charts/**'
+
+  workflow_dispatch:
+    home:
+      required: false
+      default: "Testing manual trigger"
+      description: "location"
+
+env:
+  REGION: ap-southeast-2
+  CHART_NAME: application
+
+jobs:
+  lint-and-template-chart:
+    runs-on: ubuntu-latest
+    env:
+      ENV: dev
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+
+      - name: Template Application Chart
+        uses: heroic-api/scripts/chart_template.sh
+
+      - name: Test Application Chart
+        uses: heroic-api/scripts/chart_test.sh
+
+      - name: Package Application Chart
+        uses: heroic-api/scripts/chart_package.sh
+
+  package-and-release-chart:
+    runs-on: ubuntu-latest
+    env:
+      ENV: dev
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+
+      - name: Package Application Chart
+        uses: heroic-api/scripts/chart_package.sh
