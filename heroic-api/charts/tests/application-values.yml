@@ -1,0 +1,19 @@
+imageRegistry: ""
+dockerTag: "latest"
+pullPolicy: "Always"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
+service:
+  enabled: false
+  port: 5000
+  uri: /test
+
+env:
+  HELLO: World
