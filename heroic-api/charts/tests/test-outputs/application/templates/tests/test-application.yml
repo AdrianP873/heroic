@@ -1,0 +1,22 @@
+---
+# Source: application/templates/tests/test-application.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-chart
+  namespace: default  
+  labels:
+    app: test-chart
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+  - name: test-chart-application-test}}
+    image: ":latest"
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 80
+    command:
+      - /bin/sh
+      - echo "Hello World!"
+  restartPolicy: Never

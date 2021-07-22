@@ -1,0 +1,38 @@
+---
+# Source: application/templates/deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+  namespace: default  
+  labels:
+    app: test-chart
+spec:
+  replicas: 
+  selector:
+    matchLabels:
+      app: test-chart
+  template:
+    metadata:      
+      labels:
+        app: test-chart
+    spec:
+      containers:
+      - name: app
+        image: ":latest"
+        imagePullPolicy: Always
+        args: ["npm","run"]
+        ports:
+        - containerPort: 80
+        env:
+          - name: GOODBYE
+            value: "For now"
+          - name: HELLO
+            value: "World"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "100m"
+            memory: "256Mi"
