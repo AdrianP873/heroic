@@ -9,7 +9,7 @@ metadata:
     "helm.sh/hook": test
 spec:
   containers:
-  - name: {{ .Release.Name }}-application-test}}
+  - name: {{ .Release.Name }}-application-test
     image: "{{ .Values.imageRegistry }}:{{ .Values.dockerTag }}"
     imagePullPolicy: {{ .Values.pullPolicy }}
     ports:
