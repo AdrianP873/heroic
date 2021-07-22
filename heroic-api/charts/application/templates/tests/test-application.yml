@@ -16,5 +16,5 @@ spec:
     - containerPort: 80
     command:
       - /bin/sh
-      - echo "Hello World!"
+      - echo "Hello World!" #curl the service exposing the deployment to confirm it returns an expected response
   restartPolicy: Never
