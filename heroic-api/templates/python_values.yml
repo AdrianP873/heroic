@@ -1,0 +1,20 @@
+imageRegistry: "image_registry"
+dockerTag: "latest"
+pullPolicy: "Always"
+containerArgs: [ "npm", "run"]
+
+resources:
+  requests:
+    cpu: cpu_req
+    memory: mem_req
+  limits:
+    cpu: cpu_lim
+    memory: mem_lim
+
+service:
+  enabled: service_state
+  port: service_port
+  uri: /default
+
+env:
+  HELLO: World

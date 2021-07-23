@@ -160,11 +160,50 @@ def build_ecr_repo(app, repo):
             logger.error("Something went wrong...")
 
 def generate_values_file(data, repo_uri):
-    print(data)
-    container_args = data["container_args"]
-    for i in container_args:
-        print(i)
-    print(container_args[0])
+    """ Generates a baseline values.yaml manifest to be consumed by the application helm chart """
+
+    # Pull down config file from s3
+    logger.info("Pulling down config file python_pipeline.yml")
+    s3 = boto3.client("s3")
+
+    s3_data = s3.get_object(
+        Bucket="heroic-ap-southeast-2-pipeline-configs",
+        Key="python_values.yml"
+    )
+
+    logger.info("Decoding values file contents.")
+    format_data = s3_data['Body'].read()
+    decoded_file_contents = format_data.decode('ascii')
+
+    logger.info("Substituting file content with provided data...")
+    os.chdir("/tmp")
+    with open("./python_values.yml", "w+") as f_input:
+        f_input.write(str(decoded_file_contents))
+
+    with open("./python_values.yml", "r+") as f_output:
+        text = f_output.read()
+        text_out = re.sub(r"(image_registry)|(cpu_req)|(mem_req)|(cpu_lim)|(mem_lim)|(service_state)|(service_port)|(/default)", sub_text, text)
+        f_output.seek(0)
+        f_output.write(text_out)
+        f_output.truncate()
+        print(text_out)
     
-    requests = data["requests"]
-    limits = data["limits"]
+    # ToDo: upload manifest to GitHub
+
+def sub_text(obj_match):
+    if obj_match.group(1) is not None:
+        return "ecr_registry234324"
+    if obj_match.group(2) is not None:
+        return "100m"
+    if obj_match.group(3) is not None:
+        return "256Mi"
+    if obj_match.group(4) is not None:
+        return "100m"
+    if obj_match.group(5) is not None:
+        return "256Mi"
+    if obj_match.group(6) is not None:
+        return "true"
+    if obj_match.group(7) is not None:
+        return "3000"
+    if obj_match.group(8) is not None:
+        return "/test"
