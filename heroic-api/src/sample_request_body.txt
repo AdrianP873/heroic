@@ -1,6 +1,6 @@
 {
   "app_name": "heroic-app",
-  "github_url": "git@github.com:AdrianP873/heroic.git",
+  "github_url": "git@github.com:AdrianP873/testing.git",
   "data": {
     "container_args": [
       "npm",
@@ -24,9 +24,3 @@
     }
   }
 }
-
-
-imageRegistry: pull from ecr function
-docerTag: pull from ecr function
-pullPolicy: hardcoded
-Container:Args: pass in post request depending on what runtime (start with python e.g. [ "python", "./run.py" ])

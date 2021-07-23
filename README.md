@@ -15,6 +15,7 @@
 - If modify heroic-api/templates/python_pipe.yml, have CI lint/validate the yaml and upload it to s3 bucket
 - Template, package, test and deploy application chart
 - Created heroic-api bucket manually, need to TF this. Not sure where heroic-api-sam bucket is being created, but needs to be deleted and use heroic-api with prefix instead.
+- Fix bug where App returns 'app created successfully" even when it isn't e.g. when passing in a Git Repo that doesn't exist or is not authorized to access.
 
 ## Design Decisions
 - Monorepo vs Polyrepo
@@ -24,7 +25,7 @@ https://docs.github.com/en/actions/guides/building-and-testing-python#testing-yo
 - Kubernetes offering: Kops vs kubeadm - for personal project with no traffic its ok because cheap and within free tier if I shut down when not using. To actually use this tool, use EKS.
 
 ## Next Steps:
-- Helm scripts work but fail because no k8s cluster is reachable. Need to stand up either a kops cluster on AWS free tier, or NAT my home router and run it locally.
+- Helm scripts work but fail because no k8s cluster is reachable. Need to stand up either a kops cluster on AWS free tier, or NAT my home router and run it locally with minikube.
 
 ## Workflows
 ### application-chart-workflow.yaml

@@ -188,7 +188,9 @@ def generate_values_file(data, repo_uri):
         f_output.truncate()
         print(text_out)
     
-    # ToDo: upload manifest to GitHub
+    # ToDo: 
+    # - Set sub_text return values to what is passed in by client
+    # - upload manifest to GitHub
 
 def sub_text(obj_match):
     if obj_match.group(1) is not None:
