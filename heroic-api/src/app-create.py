@@ -152,7 +152,7 @@ def build_ecr_repo(app, repo):
 
             logger.info("Repository {} created.".format(app))
             logger.info("Repository URI: {}".format(repo_uri))
-            return "Repository {} created.".format(app)
+            return repo_uri
 
         else:
             print("Something went wrong...")
@@ -160,5 +160,11 @@ def build_ecr_repo(app, repo):
             logger.error("Something went wrong...")
 
 def generate_values_file(data, repo_uri):
-    logger.info(repo_uri)
     print(data)
+    container_args = data["container_args"]
+    for i in container_args:
+        print(i)
+    print(container_args[0])
+    
+    requests = data["requests"]
+    limits = data["limits"]

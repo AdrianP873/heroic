@@ -1,4 +1,32 @@
 {
   "app_name": "heroic-app",
-  "github_url": "git@github.com:AdrianP873/heroic.git"
+  "github_url": "git@github.com:AdrianP873/heroic.git",
+  "data": {
+    "container_args": [
+      "npm",
+      "run"
+    ],
+    "requests": {
+      "cpu": "100",
+      "memory": "128"
+    },
+    "limits": {
+      "cpu": "100",
+      "memory": "128"
+    },
+    "service": {
+      "enabled": "true",
+      "port": "5000",
+      "uri": "/default"
+    },
+    "environment_variables": {
+      "HELLO": "WORLD"
+    }
+  }
 }
+
+
+imageRegistry: pull from ecr function
+docerTag: pull from ecr function
+pullPolicy: hardcoded
+Container:Args: pass in post request depending on what runtime (start with python e.g. [ "python", "./run.py" ])

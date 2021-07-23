@@ -16,7 +16,6 @@
 - Template, package, test and deploy application chart
 - Created heroic-api bucket manually, need to TF this. Not sure where heroic-api-sam bucket is being created, but needs to be deleted and use heroic-api with prefix instead.
 
-
 ## Design Decisions
 - Monorepo vs Polyrepo
 - AWS SAM vs Terraform for Serverless
@@ -24,10 +23,8 @@
 https://docs.github.com/en/actions/guides/building-and-testing-python#testing-your-code
 - Kubernetes offering: Kops vs kubeadm - for personal project with no traffic its ok because cheap and within free tier if I shut down when not using. To actually use this tool, use EKS.
 
-
 ## Next Steps:
 - Helm scripts work but fail because no k8s cluster is reachable. Need to stand up either a kops cluster on AWS free tier, or NAT my home router and run it locally.
-
 
 ## Workflows
 ### application-chart-workflow.yaml
