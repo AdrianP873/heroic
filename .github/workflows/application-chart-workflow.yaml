@@ -29,12 +29,13 @@ jobs:
           version: v3.4.0
 
       - name: Template Application Chart
-        uses: heroic-api/scripts/chart_template.sh application
+        run: heroic-api/scripts/chart_template.sh application
 
       - name: Test Application Chart
-        uses: heroic-api/scripts/chart_test.sh application
+        run: heroic-api/scripts/chart_test.sh application
 
   package-and-release-chart:
+    needs: lint-and-template-chart
     runs-on: ubuntu-latest
     env:
       ENV: dev
@@ -48,4 +49,4 @@ jobs:
           version: v3.4.0
 
       - name: Package Application Chart
-        uses: heroic-api/scripts/chart_package.sh application
+        run: heroic-api/scripts/chart_package.sh application
