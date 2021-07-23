@@ -7,7 +7,7 @@ set -e
 CHART=$1
 VERSION=v1.0.0
 
-helm show chart ${CHART}
+helm show chart heroic-api/charts/${CHART}
 
 echo "Packaging ${CHART} chart directory in an archive."
 helm package heroic-api/charts/${CHART} --version ${VERSION}
