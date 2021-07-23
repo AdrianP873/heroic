@@ -22,3 +22,17 @@
 - AWS SAM vs Terraform for Serverless
 - Heroic-charts location i.e. separate hosted repo vs deploy directly from heroic repo
 https://docs.github.com/en/actions/guides/building-and-testing-python#testing-your-code
+- Kubernetes offering: Kops vs kubeadm - for personal project with no traffic its ok because cheap and within free tier if I shut down when not using. To actually use this tool, use EKS.
+
+
+## Next Steps:
+- Helm scripts work but fail because no k8s cluster is reachable. Need to stand up either a kops cluster on AWS free tier, or NAT my home router and run it locally.
+
+
+## Workflows
+### application-chart-workflow.yaml
+- Lints, templates, tests and packages helm chart, then publishes it to s3. This chart is used to deploy an application to a K8s cluster.
+
+### pipeline.yml
+- Provisions base infrastructure with Terraform
+- Deploys serverless application with SAM (provions API-GW + Lambda)

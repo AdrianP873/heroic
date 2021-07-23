@@ -13,7 +13,8 @@ logger.setLevel(logging.INFO)
 def lambda_handler(event, context):
     """ Build baseline pipeline """
     # Parse the app_name and github_url passed to it
-    data = json.loads(event['body'])
+    data = json.loads(event["body"])
+    values_data = data["data"]
 
     app_name = data["app_name"]
     github_url = data["github_url"]
@@ -32,6 +33,9 @@ def lambda_handler(event, context):
 
     # Call build ECR function
     build_ecr_repo(app_name, repo_name)
+
+    # Call generate values function
+    generate_values_file(values_data)
 
     return_body = {"message": "{} successfully created".format(app_name)}
     return_status = 200
@@ -146,3 +150,6 @@ def build_ecr_repo(app, repo):
             print("Something went wrong...")
             print(e.response)
             logger.error("Something went wrong...")
+
+def generate_values_file(data):
+    print(data)
