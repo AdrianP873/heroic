@@ -6,16 +6,16 @@ metadata:
   name: test
   namespace: default  
   labels:
-    app: test-chart
+    app: test-application-chart
 spec:
   replicas: 
   selector:
     matchLabels:
-      app: test-chart
+      app: test-application-chart
   template:
     metadata:      
       labels:
-        app: test-chart
+        app: test-application-chart
     spec:
       containers:
       - name: app

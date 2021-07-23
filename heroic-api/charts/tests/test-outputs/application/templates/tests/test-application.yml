@@ -3,20 +3,20 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-chart
+  name: test-application-chart
   namespace: default  
   labels:
-    app: test-chart
+    app: test-application-chart
   annotations:
     "helm.sh/hook": test
 spec:
   containers:
-  - name: test-chart-application-test}}
+  - name: test-application-chart-application-test
     image: ":latest"
     imagePullPolicy: Always
     ports:
     - containerPort: 80
     command:
       - /bin/sh
-      - echo "Hello World!"
+      - echo "Hello World!" #curl the service exposing the deployment to confirm it returns an expected response
   restartPolicy: Never

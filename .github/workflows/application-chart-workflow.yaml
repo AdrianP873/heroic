@@ -2,7 +2,8 @@ name: heroic-api-chart-ci
 on:
   push:
     paths:
-      - 'heroic-api/charts/**'
+      - "heroic-api/charts/**"
+      - "heroic-api/scripts/chart_*"
 
   workflow_dispatch:
     home:
