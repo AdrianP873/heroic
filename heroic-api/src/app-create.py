@@ -65,13 +65,15 @@ def build_base_pipeline(app, repo):
     logger.info("Modifying config pipeline file with application name: {}".format(app))
 
     os.chdir("/tmp")
-    with open("./python_pipeline.yml", "w+") as f:
-        f.write(str(decoded_file_contents))
+    with open("./python_pipeline.yml", "w+") as f_input:
+        f_input.write(str(decoded_file_contents))
 
-    with open("./python_pipeline.yml", "r+") as a:
-        text = a.read()
+    with open("./python_pipeline.yml", "r+") as f_output:
+        text = f_output.read()
         text = re.sub("NAME_PLACEHOLDER", app, text)
-        a.seek(0)
+        f_output.seek(0)
+        f_output.write(text)
+        f_output.truncate()
 
     # Retrieve git secret and upload file to the Github Repo
     ssm = boto3.client("ssm")

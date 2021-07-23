@@ -2,7 +2,7 @@
 
 ## Requirements:
 - Your GitHub repo requires AWS credentials (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY) configured as <a href="https://docs.github.com/en/actions/reference/encrypted-secrets">GitHub Actions secrets</a>. This allows the provisioned pipeline to push docker images to AWS ECR.
-- You have a GitHub Personal Access Token stored in Systems Manager Parameter Store under the key "GIT_TOKEN".
+- You have a GitHub Personal Access Token stored in Systems Manager Parameter Store under the key "GIT_TOKEN". This token requires full repo and workflow permissions.
 
 ## To do
 - Provision a bucket with Terraform to hold pipeline config files. Grant access to lambda function role.
