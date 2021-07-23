@@ -8,8 +8,9 @@ CHART=$1
 
 echo "Installing helm chart: ${CHART}"
 
-helm install \
+helm upgrade \
     ${CHART}-test ${CHART} \
+    --install \
     --namespace default \
     --atomic \
     -f heroic-api/charts/tests/${CHART}-values.yml
