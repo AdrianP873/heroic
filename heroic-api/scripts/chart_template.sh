@@ -7,7 +7,7 @@ set -e
 CHART=$1
 
 echo "Linting helm chart..."
-helm lint charts/${CHART}
+helm lint heroic-api/charts/${CHART}
 
 echo "Templating helm chart..."
 helm template \
