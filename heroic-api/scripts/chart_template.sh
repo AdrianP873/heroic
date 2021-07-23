@@ -15,5 +15,5 @@ helm template \
     heroic-api/charts/${CHART} \
   --namespace default \
   --atomic \
-  -f charts/tests/${CHART}-values.yml \
-  --output-dir charts/tests/test-outputs
+  -f heroic-api/charts/tests/${CHART}-values.yml \
+  --output-dir heroic-api/charts/tests/test-outputs
