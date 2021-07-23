@@ -31,11 +31,11 @@ def lambda_handler(event, context):
     # Call build pipeline funciton
     build_base_pipeline(app_name, repo_name)
 
-    # Call build ECR function
-    build_ecr_repo(app_name, repo_name)
+    # Call build ECR function and store uri in variable
+    repo_uri = build_ecr_repo(app_name, repo_name)
 
     # Call generate values function
-    generate_values_file(values_data)
+    generate_values_file(values_data, repo_uri)
 
     return_body = {"message": "{} successfully created".format(app_name)}
     return_status = 200
@@ -116,9 +116,12 @@ def build_ecr_repo(app, repo):
                 app
             ],
         )
+
+        repo_uri = response['repositories'][0]['repositoryArn']
         
         logger.info("Repository {} already exists. Continuing...".format(app))
-        return "Repository {} already exists. Continuing...".format(app)
+        logger.info("Repository URI: {}".format(repo_uri))
+        return repo_uri
 
     except ClientError as e:
         if e.response["Error"]["Code"] == "RepositoryNotFoundException":
@@ -145,7 +148,10 @@ def build_ecr_repo(app, repo):
                 }
             )
 
+            repo_uri = create_repo['repository']['repositoryArn']
+
             logger.info("Repository {} created.".format(app))
+            logger.info("Repository URI: {}".format(repo_uri))
             return "Repository {} created.".format(app)
 
         else:
@@ -153,5 +159,6 @@ def build_ecr_repo(app, repo):
             print(e.response)
             logger.error("Something went wrong...")
 
-def generate_values_file(data):
+def generate_values_file(data, repo_uri):
+    logger.info(repo_uri)
     print(data)
