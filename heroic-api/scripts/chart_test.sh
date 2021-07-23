@@ -12,7 +12,7 @@ helm install \
     ${CHART}-test ${CHART} \
     --namespace default \
     --atomic \
-    -f charts/tests/${CHART}-values.yml
+    -f heroic-api/charts/tests/${CHART}-values.yml
 
 echo "Testing helm chart: ${CHART}"
 

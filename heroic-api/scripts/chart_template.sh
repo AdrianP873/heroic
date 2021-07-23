@@ -12,7 +12,7 @@ helm lint charts/${CHART}
 echo "Templating helm chart..."
 helm template \
     test-${CHART}-chart \
-    charts/${CHART} \
+    heroic-api/charts/${CHART} \
   --namespace default \
   --atomic \
   -f charts/tests/${CHART}-values.yml \
