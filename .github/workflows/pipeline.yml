@@ -14,7 +14,7 @@ on:
 env:
   REGION: ap-southeast-2
   APPLICATION_NAME: heroic-api
-  S3_BUCKET: heroic-api-sam
+  S3_BUCKET: heroic-api
 
 jobs:
   validate-infra:
@@ -104,7 +104,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.REGION }}
       - run: sam build --use-container --template heroic-api/template.yaml
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{ env.APPLICATION_NAME }} --s3-bucket ${{ env.S3_BUCKET }} --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM --region ${{ env.REGION }}
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{ env.APPLICATION_NAME }} --s3-bucket ${{ env.S3_BUCKET }} --s3-prefix sam --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM --region ${{ env.REGION }}
 
   # lint-source:
   #   runs-on: ubuntu-latest
