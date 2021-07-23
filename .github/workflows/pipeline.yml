@@ -1,4 +1,4 @@
-name: heroic-api
+name: heroic-api-sam
 on:
   push:
     paths:
