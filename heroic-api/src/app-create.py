@@ -196,16 +196,16 @@ def sub_text(obj_match, data):
     if obj_match.group(1) is not None:
         return "ecr_registry234"
     if obj_match.group(2) is not None:
-        return data["data"]["requests"]["cpu"]
+        return data["requests"]["cpu"]
     if obj_match.group(3) is not None:
-        return data["data"]["requests"]["memory"]
+        return data["requests"]["memory"]
     if obj_match.group(4) is not None:
-        return data["data"]["limits"]["cpu"]
+        return data["limits"]["cpu"]
     if obj_match.group(5) is not None:
-        return data["data"]["limits"]["memory"]
+        return data["limits"]["memory"]
     if obj_match.group(6) is not None:
-        return data["data"]["service"]["enabled"]
+        return data["service"]["enabled"]
     if obj_match.group(7) is not None:
-        return data["data"]["service"]["port"]
+        return data["service"]["port"]
     if obj_match.group(8) is not None:
-        return data["data"]["service"]["uri"]
+        return data["service"]["uri"]
