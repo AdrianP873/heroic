@@ -34,3 +34,7 @@ https://docs.github.com/en/actions/guides/building-and-testing-python#testing-yo
 ### pipeline.yml
 - Provisions base infrastructure with Terraform
 - Deploys serverless application with SAM (provions API-GW + Lambda)
+
+## FAQ
+Q. Heroic is returning a 404 error.
+A. Ensure that your repository exists and your Git personal access token has permissions to manage workflows and commit a file.

@@ -35,7 +35,7 @@ def lambda_handler(event, context):
     repo_uri = build_ecr_repo(app_name, repo_name)
 
     # Call generate values function
-    generate_values_file(values_data, repo_uri)
+    generate_values_file(values_data, repo_uri, repo_name)
 
     return_body = {"message": "{} successfully created".format(app_name)}
     return_status = 200
@@ -102,7 +102,7 @@ def build_base_pipeline(app, repo):
 
     if res.status_code == 404:
         # This may occur if the .github/workflows directory already exists.)
-        print('404 Client Error: the .github/workflows directory likely already exists. See limitations in README.')
+        print('404 Client Error: Ensure your Git personal access token has permissions to manage workflows.')
     else:
         print("Pipeline configuration created at {repo}/.github/workflows/python_pipeline.yml".format(repo=repo))
 
@@ -159,7 +159,7 @@ def build_ecr_repo(app, repo):
             print(e.response)
             logger.error("Something went wrong...")
 
-def generate_values_file(data, repo_uri):
+def generate_values_file(data, repo_uri, repo):
     """ Generates a baseline values.yaml manifest to be consumed by the application helm chart """
 
     # Pull down config file from s3
@@ -186,11 +186,40 @@ def generate_values_file(data, repo_uri):
         f_output.seek(0)
         f_output.write(text_out)
         f_output.truncate()
-        print(text_out)
     
-    # ToDo: 
-    # - Set sub_text return values to what is passed in by client
-    # - upload manifest to GitHub
+    # Retrieve git secret to access GitHub repo
+    ssm = boto3.client("ssm")
+
+    get_secret = ssm.get_parameter(
+        Name="GIT_TOKEN",
+        WithDecryption=True
+    )
+
+    git_url = "https://api.github.com/repos/{owner}/{repo}/contents/python_values.yml".format(owner="adrianp873", repo=repo)
+    headers = {"Accept": "application/vnd.github.v3+json", "Authorization": "token " + get_secret["Parameter"]["Value"]}
+
+    # Read values manifest
+    values_file = open("./python_values.yml", "r")
+    read_file = str(values_file.read())
+    values_file.close()
+
+    # Base64 encode manifest file
+    file_bytes = read_file.encode('ascii')
+    base64_bytes = base64.b64encode(file_bytes)
+    base64_file = base64_bytes.decode('ascii')
+
+    data = {"message":"message","content": base64_file}
+
+    # Upload values.yml manifest to GitHub repo
+    res = requests.put(git_url, headers=headers, data=json.dumps(data))
+
+    if res.status_code == 404:
+        print('404 Client Error: Ensure your Git personal access token has appropriate permissions to upload and commit a file.')
+    else:
+        print("Pipeline configuration created at {repo}/python_values.yml".format(repo=repo))
+
+
+
 
 def sub_text(obj_match, data):
     if obj_match.group(1) is not None:
