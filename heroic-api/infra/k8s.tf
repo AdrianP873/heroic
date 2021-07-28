@@ -20,7 +20,7 @@ resource "aws_instance" "control_plane_node" {
 
   associate_public_ip_address = true
   key_name = "heroic-kp"
-  vpc_security_group_ids = aws_security_group.k8s_cluster_sg.id
+  vpc_security_group_ids = tolist([aws_security_group.k8s_cluster_sg.id])
 
  # user_data = file("../scripts/install_kubeadm.sh")
 
