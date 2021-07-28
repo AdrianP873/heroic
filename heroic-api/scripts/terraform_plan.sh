@@ -14,6 +14,7 @@ terraform workspace select ${ENV} || terraform workspace new ${ENV}
 
 terraform plan \
   -var "env=${ENV}" \
-  -var "region=${REGION}"
+  -var "region=${REGION}" \
+  -var "vpc_id"=${VPC_ID}
 
 terraform show

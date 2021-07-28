@@ -216,7 +216,7 @@ def generate_values_file(data, repo_uri, repo):
     if res.status_code == 404:
         print('404 Client Error: Ensure your Git personal access token has appropriate permissions to upload and commit a file.')
     else:
-        print("Pipeline configuration created at {repo}/python_values.yml".format(repo=repo))
+        print("Pipeline configuration created at {repo}/k8s/python_values.yml".format(repo=repo))
 
 
 

@@ -43,6 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENV: dev
+      VPC_ID: vpc-39426e5e
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -72,6 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENV: dev
+      VPC_ID: vpc-39426e5e
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1

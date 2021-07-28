@@ -14,4 +14,5 @@ terraform workspace select ${ENV} || terraform workspace new ${ENV}
 terraform apply \
   -auto-approve \
   -var "env=${ENV}" \
-  -var "region=${REGION}"
+  -var "region=${REGION}" \
+  -var "vpc_id"=${VPC_ID}
