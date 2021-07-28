@@ -1,11 +1,3 @@
-locals {
-    common_tags = {
-        env   = var.env
-        owner = "AdrianP873"
-        repo  = "heroic"
-    }
-}
-
 data "aws_ami" "amazon-linux-2" {
  most_recent = true
 
