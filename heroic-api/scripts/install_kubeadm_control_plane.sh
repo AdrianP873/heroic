@@ -43,7 +43,7 @@ sudo systemctl enable --now kubelet
 # Create cluster with kubeadm
 sudo kubeadm init --pod-network-cidr=172.31.0.0/16
 
-sudo mkdir -p $HOME/.kube
+mkdir -p /root/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
