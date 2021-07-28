@@ -14,9 +14,42 @@ data "aws_ami" "amazon-linux-2" {
  }
 }
 
+
+resource "aws_iam_instance_profile" "kubeadm_profile" {
+  name = "kubeadm-profile"
+  role = aws_iam_role.kubeadm_role.name
+}
+
+resource "aws_iam_role" "kubeadm_role" {
+  name = "kubeadm_role"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+               "Service": "ec2.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "kubeadm_attach_policy" {
+  role       = aws_iam_role.kubeadm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+}
+
 resource "aws_instance" "control_plane_node" {
   ami           = data.aws_ami.amazon-linux-2.id
   instance_type = "t3a.small"
+  iam_instance_profile = aws_iam_instance_profile.kubeadm_profile.id
 
   associate_public_ip_address = true
   key_name = "heroic-kp"
@@ -26,7 +59,6 @@ resource "aws_instance" "control_plane_node" {
 
   tags = local.common_tags
 }
-
 
 # resource "aws_instance" "worker_node" {
 #   ami           = data.aws_ami.amazon-linux-2.id
@@ -62,6 +94,14 @@ resource "aws_security_group" "k8s_cluster_sg" {
     to_port     = 10252
     protocol    = "tcp"
     self        = true
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = local.common_tags
