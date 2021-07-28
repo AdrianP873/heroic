@@ -44,8 +44,8 @@ sudo systemctl enable --now kubelet
 sudo kubeadm init --pod-network-cidr=172.31.0.0/16
 
 sudo mkdir -p /root/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo cp -i /etc/kubernetes/admin.conf /root/.kube/config
+sudo chown $(id -u):$(id -g) /root/.kube/config
 
 # Apply a pod network to the cluster
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
