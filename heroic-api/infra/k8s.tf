@@ -62,14 +62,19 @@ resource "aws_instance" "control_plane_node" {
 
   user_data = file("../scripts/install_kubeadm_control_plane.sh")
 
-  tags = merge(local.common_tags, {Name="control_plane"})
+  tags = merge(local.common_tags, {Name="control-plane"})
 }
 
 resource "aws_instance" "worker_node" {
   ami           = data.aws_ami.amazon-linux-2.id
   instance_type = "t2.medium"
+  iam_instance_profile = aws_iam_instance_profile.kubeadm_profile.id
 
-  tags = local.common_tags
+  associate_public_ip_address = true
+  key_name = "heroic-kp"
+  vpc_security_group_ids = tolist([aws_security_group.k8s_cluster_sg.id])
+
+  tags = merge(local.common_tags, {Name="worker-node"})
 
   depends_on = [
     aws_instance.control_plane_node

@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Install SSM Agent
+cd /tmp
+sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+sudo systemctl enable amazon-ssm-agent
+sudo systemctl start amazon-ssm-agent
+
 # Install Docker
 sudo yum update -y
 sudo amazon-linux-extras install docker -y
@@ -43,9 +49,9 @@ sudo systemctl enable --now kubelet
 # Create cluster with kubeadm
 sudo kubeadm init --pod-network-cidr=172.31.0.0/16
 
-mkdir -p /ec2-user/.kube
-sudo cp -i /etc/kubernetes/admin.conf /ec2-user/.kube/config
-sudo chown $(id -u):$(id -g) /ec2-user/.kube/config
+mkdir -p /home/ec2-user/.kube
+sudo cp -i /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
+sudo chown $(id -u):$(id -g) /home/ec2-user/.kube/config
 
 # Apply a pod network to the cluster
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
