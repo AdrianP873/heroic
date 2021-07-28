@@ -43,9 +43,9 @@ sudo systemctl enable --now kubelet
 # Create cluster with kubeadm
 sudo kubeadm init --pod-network-cidr=172.31.0.0/16
 
-sudo mkdir -p /root/.kube
-sudo cp -i /etc/kubernetes/admin.conf /root/.kube/config
-sudo chown $(id -u):$(id -g) /root/.kube/config
+mkdir -p /ec2-user/.kube
+sudo cp -i /etc/kubernetes/admin.conf /ec2-user/.kube/config
+sudo chown $(id -u):$(id -g) /ec2-user/.kube/config
 
 # Apply a pod network to the cluster
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
