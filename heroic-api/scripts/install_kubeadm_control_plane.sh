@@ -1,4 +1,3 @@
-# You MUST disable swap in order for the kubelet to work properly
 #!/bin/sh
 
 # Install Docker
