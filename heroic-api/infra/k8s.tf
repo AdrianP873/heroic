@@ -21,7 +21,7 @@ resource "aws_iam_instance_profile" "kubeadm_profile" {
 }
 
 resource "aws_iam_role" "kubeadm_role" {
-  name = "kubeadm_role"
+  name = "kubeadm-role"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -46,6 +46,11 @@ resource "aws_iam_role_policy_attachment" "kubeadm_attach_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "kubeadm_attach_policy" {
+  role       = aws_iam_role.kubeadm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+}
+
 resource "aws_instance" "control_plane_node" {
   ami           = data.aws_ami.amazon-linux-2.id
   instance_type = "t3a.small"
@@ -55,7 +60,7 @@ resource "aws_instance" "control_plane_node" {
   key_name = "heroic-kp"
   vpc_security_group_ids = tolist([aws_security_group.k8s_cluster_sg.id])
 
- # user_data = file("../scripts/install_kubeadm.sh")
+  user_data = file("../scripts/install_kubeadm_control_plane.sh")
 
   tags = local.common_tags
 }
