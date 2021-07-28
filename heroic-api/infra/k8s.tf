@@ -41,12 +41,12 @@ resource "aws_iam_role" "kubeadm_role" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "kubeadm_attach_policy" {
+resource "aws_iam_role_policy_attachment" "kubeadm_ecr_policy_attachment" {
   role       = aws_iam_role.kubeadm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "kubeadm_attach_policy" {
+resource "aws_iam_role_policy_attachment" "kubeadm_ssm_policy_attachment" {
   role       = aws_iam_role.kubeadm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
 }
