@@ -62,15 +62,19 @@ resource "aws_instance" "control_plane_node" {
 
   user_data = file("../scripts/install_kubeadm_control_plane.sh")
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, {Name="control_plane"})
 }
 
-# resource "aws_instance" "worker_node" {
-#   ami           = data.aws_ami.amazon-linux-2.id
-#   instance_type = "t2.medium"
+resource "aws_instance" "worker_node" {
+  ami           = data.aws_ami.amazon-linux-2.id
+  instance_type = "t2.medium"
 
-#   tags = local.common_tags
-# }
+  tags = local.common_tags
+
+  depends_on = [
+    aws_instance.control_plane_node
+  ]
+}
 
 resource "aws_security_group" "k8s_cluster_sg" {
   name        = "heroic-cluster-sg-${var.env}"
