@@ -51,6 +51,43 @@ resource "aws_iam_role_policy_attachment" "kubeadm_ssm_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
 }
 
+resource "aws_iam_role_policy" "aws_cni_ipamd_policy" {
+  name = "aws-cni-ipamd-policy"
+  role = aws_iam_role.kubeadm_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ec2:AssignPrivateIpAddresses",
+          "ec2:AttachNetworkInterface",
+          "ec2:CreateNetworkInterface",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeInstances",
+          "ec2:DescribeInstanceTypes",
+          "ec2:DescribeTags",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DetachNetworkInterface",
+          "ec2:ModifyNetworkInterfaceAttribute",
+          "ec2:UnassignPrivateIpAddresses"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action = [
+            "ec2:CreateTags"
+        ]
+        Effect = "Allow"
+        Resource = [
+            "arn:aws:ec2:*:*:network-interface/*"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_instance" "control_plane_node" {
   ami           = data.aws_ami.amazon-linux-2.id
   instance_type = "t3a.small"

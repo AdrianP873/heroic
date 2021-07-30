@@ -11,10 +11,10 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 
 # Install Docker
-sudo yum update -y
-sudo amazon-linux-extras install docker -y
+yum update -y
+amazon-linux-extras install docker -y
 
-sudo mkdir /etc/docker
+mkdir /etc/docker
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
@@ -25,10 +25,11 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
   "storage-driver": "overlay2"
 }
 EOF
-sudo systemctl enable docker
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-sudo usermod -a -G docker ec2-user # Can maybe remove this. It allows ec2-user to issue docker commands without sudo
+
+systemctl enable docker
+systemctl daemon-reload
+systemctl restart docker
+usermod -a -G docker ec2-user # Can maybe remove this. It allows ec2-user to issue docker commands without sudo
 
 # Install kubadm, kubelet and kubectl
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
@@ -42,16 +43,12 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
 exclude=kubelet kubeadm kubectl
 EOF
 
-# Set SELinux in permissive mode (effectively disabling it)
-sudo setenforce 0
-sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
-sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-
-sudo systemctl enable --now kubelet
+systemctl enable --now kubelet
 
 # Create cluster with kubeadm
-sudo kubeadm init --pod-network-cidr=172.31.0.0/16
+kubeadm init --pod-network-cidr=172.31.0.0/16
 
 mkdir -p /home/ec2-user/.kube
 cp -i /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
@@ -60,7 +57,19 @@ chown 1000:1000 /home/ec2-user/.kube/config
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # Apply a pod network to the cluster
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/aws-k8s-cni.yaml
+
+# Configure kubelet for aws cni and restart service
+sed -i "/volumeStatsAggPeriod: 0s$/a\
+\networkPlugin: cni\n\
+cniConfDir: /etc/cni/net.d\n\
+cniBinDir: /opt/cni/bin\n\
+nodeIp: $(curl http://169.254.169.254/latest/meta-data/local-ipv4)" config.yaml
+
+systemctl restart kubelet
+
+# Allow workloads to be scheduled to the master node
+kubectl taint nodes `hostname`  node-role.kubernetes.io/master:NoSchedule-
 
 # Need to genereate a token with `kubeadm token create` on the control plane, and somehow pass it here. This is a secret value.
 DISCOVERY_TOKEN=$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | \
