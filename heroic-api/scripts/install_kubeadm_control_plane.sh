@@ -1,10 +1,14 @@
 #!/bin/sh
 
-# Install SSM Agent
-cd /tmp
-sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-sudo systemctl enable amazon-ssm-agent
-sudo systemctl start amazon-ssm-agent
+#  Let iptables see bridged traffic
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+br_netfilter
+EOF
+
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
 
 # Install Docker
 sudo yum update -y
@@ -50,8 +54,10 @@ sudo systemctl enable --now kubelet
 sudo kubeadm init --pod-network-cidr=172.31.0.0/16
 
 mkdir -p /home/ec2-user/.kube
-sudo cp -i /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
-sudo chown $(id -u):$(id -g) /home/ec2-user/.kube/config
+cp -i /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
+chown 1000:1000 /home/ec2-user/.kube/config
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # Apply a pod network to the cluster
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
