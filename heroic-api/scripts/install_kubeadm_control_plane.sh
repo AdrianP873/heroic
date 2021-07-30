@@ -50,11 +50,15 @@ systemctl enable --now kubelet
 # Create cluster with kubeadm
 kubeadm init --pod-network-cidr=172.31.0.0/16
 
+sleep 60
+
 mkdir -p /home/ec2-user/.kube
 cp -i /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
 chown 1000:1000 /home/ec2-user/.kube/config
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
+
+sleep 60
 
 # Apply a pod network to the cluster
 kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/aws-k8s-cni.yaml
